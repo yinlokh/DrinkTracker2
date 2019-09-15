@@ -25,7 +25,7 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_dc_logo_8"/>
+                app:srcCompat="@drawable/ic_beer"/>
 
         <com.example.drinktracker.DrinkImageView
                 android:id="@+id/drink_middle"
@@ -34,7 +34,7 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_dc_logo_8"/>
+                app:srcCompat="@drawable/ic_beer"/>
 
         <com.example.drinktracker.DrinkImageView
                 android:id="@+id/drink_right"
@@ -43,7 +43,7 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_dc_logo_8"/>
+                app:srcCompat="@drawable/ic_beer"/>
 
     </com.example.drinktracker.DrinkAnimationView>
 
@@ -55,7 +55,7 @@
             android:textSize="16sp"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:textColor="@color/stout4"
+            android:textColor="@color/beer4"
             android:background="@color/gray5"
             android:gravity="center"/>
 
@@ -66,7 +66,7 @@
             android:text="0"
             android:fontFamily="sans-serif"
             android:textSize="128sp"
-            android:textColor="@color/stout2"
+            android:textColor="@color/beer2"
             android:background="@color/gray5"
             android:gravity="center"/>
 
@@ -79,48 +79,96 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"/>
 
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="start|left"
+            android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_clock"/>
+
         <TextView
-                android:id="@+id/total_drinks"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Time"
+                android:textSize="14sp"
+                android:textColor="@color/stout2"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:gravity="start|center_vertical"
+        />
+
+        <Space android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"/>
+
+        <TextView
+                android:id="@+id/hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|end"
+                android:text="0"
+                android:textSize="14sp"
+                android:textColor="@color/stout1"
+                android:layout_marginLeft="8dp"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_bac"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="BAC"
+                android:textSize="14sp"
+                android:textColor="@color/wine2"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:gravity="start|center_vertical"
+        />
+
+        <Space android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"/>
+
+        <TextView
+                android:id="@+id/bac"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:fontFamily="sans-serif"
-                android:textSize="16sp"
-                android:textColor="@color/beer1"
-                android:gravity="center"/>
+                android:textSize="14sp"
+                android:textColor="@color/wine1"
+                android:layout_marginLeft="8dp"
+        />
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+    </LinearLayout>
 
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_bac"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BAC"
-                    android:textSize="16sp"
-                    android:textColor="@color/wine2"
-                    android:gravity="start|center_vertical"
-            />
-
-            <TextView
-                    android:id="@+id/bac"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="16sp"
-                    android:textColor="@color/wine1"
-                    android:layout_marginLeft="8dp"
-            />
-
-        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

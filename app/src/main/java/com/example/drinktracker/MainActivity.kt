@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(), Listener {
         preferences.init(this)
         setContentView(R.layout.activity_main)
         swipe_view.listener = this
-        total_drinks.setText(preferences.totalDrinkCount.toString())
     }
 
     override fun onResume() {
@@ -50,14 +49,12 @@ class MainActivity : AppCompatActivity(), Listener {
         Snackbar.make(swipe_view, "Adding 1 drink", Snackbar.LENGTH_LONG).show()
         changeCount(1F)
         preferences.setTotalDrinkCount(preferences.totalDrinkCount + 1)
-        total_drinks.setText(preferences.totalDrinkCount.toString())
     }
 
     override fun swipeLeft() {
         Snackbar.make(swipe_view, "Removing 1 drink", Snackbar.LENGTH_LONG).show()
         changeCount(-1F)
         preferences.setTotalDrinkCount(preferences.totalDrinkCount - 1)
-        total_drinks.setText(preferences.totalDrinkCount.toString())
     }
 
     private fun changeCount(change : Float) {
