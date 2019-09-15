@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- palette -->
+    <color name="black">#000000</color>
+
+    <color name="gray1">#F6F6F5</color>
+    <color name="gray2">#C2C2C2</color>
+    <color name="gray3">#979797</color>
+    <color name="gray4">#6A6969</color>
+    <color name="gray5">#303030</color>
+
+    <color name="beer1">#FFE1A5</color>
+    <color name="beer2">#FFD172</color>
+    <color name="beer3">#EDB747</color>
+    <color name="beer4">#B89720</color>
+    <color name="beer5">#604102</color>
+
+    <color name="wine1">#FDA4AA</color>
+    <color name="wine2">#FA707A</color>
+    <color name="wine3">#E74551</color>
+    <color name="wine4">#B51F2A</color>
+    <color name="wine5">#5E0208</color>
+
+    <color name="stout1">#FFCDA5</color>
+    <color name="stout2">#FFB172</color>
+    <color name="stout3">#ED9147</color>
+    <color name="stout4">#B96420</color>
+    <color name="stout5">#602C02</color>
+</resources>
