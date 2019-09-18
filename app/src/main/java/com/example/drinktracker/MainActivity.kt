@@ -1,10 +1,11 @@
 package com.example.drinktracker
 
 import android.os.Bundle
-import android.os.SystemClock
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.drinktracker.SwipeView.Listener
+import com.example.drinktracker.calculator.DrinkStatsCalculator
+import com.example.drinktracker.storage.DrinkTrackerPreferences
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
@@ -16,12 +17,24 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), Listener {
 
-    private val preferences : DTPreferences = DTPreferences()
+    private val preferences : DrinkTrackerPreferences =
+        DrinkTrackerPreferences()
     private val detaches : PublishSubject<Unit> = PublishSubject.create()
+
+    private val bacFormat = DecimalFormat()
+    private val drinksFormat = DecimalFormat()
+
+    private var calculator : DrinkStatsCalculator? = null
+
+    init {
+        bacFormat.setMaximumFractionDigits(2)
+        drinksFormat.setMaximumFractionDigits(1)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences.init(this)
+        calculator = DrinkStatsCalculator(preferences)
         setContentView(R.layout.activity_main)
         swipe_view.listener = this
     }
@@ -29,11 +42,13 @@ class MainActivity : AppCompatActivity(), Listener {
     override fun onResume() {
         super.onResume()
 
-        refreshCount()
-        Observable.interval(3L, TimeUnit.SECONDS)
+        update()
+        Observable.interval(1L, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .takeUntil(detaches)
-            .subscribe{unused -> refreshCount()}
+            .subscribe{unused ->
+                update()
+            }
     }
 
     override fun onPause() {
@@ -48,47 +63,26 @@ class MainActivity : AppCompatActivity(), Listener {
     override fun swipeRight() {
         Snackbar.make(swipe_view, "Adding 1 drink", Snackbar.LENGTH_LONG).show()
         changeCount(1F)
-        preferences.setTotalDrinkCount(preferences.totalDrinkCount + 1)
     }
 
     override fun swipeLeft() {
         Snackbar.make(swipe_view, "Removing 1 drink", Snackbar.LENGTH_LONG).show()
         changeCount(-1F)
-        preferences.setTotalDrinkCount(preferences.totalDrinkCount - 1)
     }
 
     private fun changeCount(change : Float) {
-        refreshCount()
-        val current = Math.max(0F, preferences.drinkCount + change)
-        preferences.setDrinkCount(current)
-        preferences.setTime(SystemClock.elapsedRealtime())
-        update()
-    }
-
-    private fun refreshCount() {
-        val elapsedTimeMs = SystemClock.elapsedRealtime()
-        val processedDrinks = (elapsedTimeMs - preferences.timeMs).toDouble() / TimeUnit.HOURS.toMillis(1)
-        val current = Math.max(0F, preferences.drinkCount - processedDrinks.toFloat())
-        preferences.setDrinkCount(current)
-        preferences.setTime(elapsedTimeMs)
+        calculator?.addDrink(change)
         update()
     }
 
     private fun update() {
-        val remainingDrinks = DecimalFormat()
-        remainingDrinks.setMaximumFractionDigits(1)
-
-        val bacFormat = DecimalFormat()
-        bacFormat.setMaximumFractionDigits(2)
-
-        drinks_counter.setText(remainingDrinks.format(Math.min(preferences.drinkCount, 99.99F)))
-        bac.setText(bacFormat.format(calculateBAC()))
-    }
-
-    private fun calculateBAC() : Double {
-        val drinkOz = preferences.drinkCount * 0.5f
-        val weightLbs = 140
-        val distributionRatio = 0.73 // 0.66 for women
-        return (drinkOz * 5.14 / weightLbs * distributionRatio) - 0.015 * preferences.timeMs / TimeUnit.HOURS.toMillis(1)
+        calculator?.refreshStats()
+        val stats = calculator?.getStats()
+        drinks_counter.setText(drinksFormat.format(Math.min(stats?.totalDrinks?:0f, 99.99F)))
+        bac.setText(bacFormat.format(stats?.bac?:0f))
+        totalTime.setText(String.format("%02d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(stats?.totalTimeMs?:0),
+            TimeUnit.MILLISECONDS.toMinutes(stats?.totalTimeMs?:0) % TimeUnit.HOURS.toMinutes(1),
+            TimeUnit.MILLISECONDS.toSeconds(stats?.totalTimeMs?:0) % TimeUnit.MINUTES.toSeconds(1)))
     }
 }
