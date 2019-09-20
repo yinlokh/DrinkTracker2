@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), Listener {
     private var calculator : DrinkStatsCalculator? = null
 
     init {
-        bacFormat.setMaximumFractionDigits(2)
+        bacFormat.setMaximumFractionDigits(3)
         drinksFormat.setMaximumFractionDigits(1)
     }
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), Listener {
         super.onResume()
 
         update()
-        Observable.interval(1L, TimeUnit.SECONDS)
+        Observable.interval(1L, TimeUnit.MINUTES)
             .observeOn(AndroidSchedulers.mainThread())
             .takeUntil(detaches)
             .subscribe{unused ->
@@ -80,9 +80,8 @@ class MainActivity : AppCompatActivity(), Listener {
         val stats = calculator?.getStats()
         drinks_counter.setText(drinksFormat.format(Math.min(stats?.totalDrinks?:0f, 99.99F)))
         bac.setText(bacFormat.format(stats?.bac?:0f))
-        totalTime.setText(String.format("%02d:%02d:%02d",
+        totalTime.setText(String.format("%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(stats?.totalTimeMs?:0),
-            TimeUnit.MILLISECONDS.toMinutes(stats?.totalTimeMs?:0) % TimeUnit.HOURS.toMinutes(1),
-            TimeUnit.MILLISECONDS.toSeconds(stats?.totalTimeMs?:0) % TimeUnit.MINUTES.toSeconds(1)))
+            TimeUnit.MILLISECONDS.toMinutes(stats?.totalTimeMs?:0) % TimeUnit.HOURS.toMinutes(1)))
     }
 }

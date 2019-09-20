@@ -3,13 +3,21 @@ package com.example.drinktracker.calculator
 import com.example.drinktracker.storage.DrinkTrackerPreferences
 import java.util.concurrent.TimeUnit
 
+
 class DrinkStatsCalculator (val preferences : DrinkTrackerPreferences){
 
+    /**
+     * https://en.wikipedia.org/wiki/Blood_alcohol_content
+     * Use Widmark's formula
+     */
     companion object {
-        val STD_DRINK_OZ : Float = 0.5f
-        val LIQUID_TO_WT_OZ : Float = 5.14f
-        val FEMALE_DISTRIBUTION_RATIO : Float = 0.66f
-        val MALE_DISTRIBUTION_RATIO : Float = 0.73f
+        val LB_TO_KG = 0.453592f
+        val PCT_WATER_IN_BLOOD = 0.806f
+        val SD_TO_GRAMS : Float = 1.2f
+        val FEMALE_BODY_WATER_CONSTANT = 0.49f
+        val FEMALE_METABOLISM_CONSTANT = 0.017f
+        val MALE_BODY_WATER_CONSTANT = 0.58f
+        val MALE_METABOLISM_CONSTANT = 0.015f
     }
 
     var bac : Float = 0f
@@ -28,9 +36,10 @@ class DrinkStatsCalculator (val preferences : DrinkTrackerPreferences){
     fun refreshStats() {
         val currentTImeMs = System.currentTimeMillis()
         val elapsedTimeMs = currentTImeMs - lastUpdateTimeMs
-        val bacReduction = 0.015f * elapsedTimeMs / TimeUnit.HOURS.toMillis(1)
+        val bacReduction = MALE_METABOLISM_CONSTANT * elapsedTimeMs / TimeUnit.HOURS.toMillis(1)
         val currentBac = Math.max(0f, bac - bacReduction)
-        preferences.setBac(currentBac)
+        bac = currentBac
+        preferences.setBac(bac)
         preferences.setLastUpdateTimeMs(currentTImeMs)
         lastUpdateTimeMs = currentTImeMs
     }
@@ -42,7 +51,9 @@ class DrinkStatsCalculator (val preferences : DrinkTrackerPreferences){
         totalDrinks = Math.max(0f, totalDrinks)
 
         val actualChange = totalDrinks - previousDrinks
-        bac += actualChange * STD_DRINK_OZ * LIQUID_TO_WT_OZ / weightLbs * MALE_DISTRIBUTION_RATIO
+        bac +=
+            actualChange * PCT_WATER_IN_BLOOD * SD_TO_GRAMS /
+                    (weightLbs * LB_TO_KG * MALE_BODY_WATER_CONSTANT)
         bac = Math.max(0f, bac)
         preferences.setBac(bac)
         preferences.setTotalDrinkCount(Math.max(0f, totalDrinks))
