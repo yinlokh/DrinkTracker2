@@ -32,8 +32,6 @@ class DrinkImageView : AppCompatImageView {
         super.onDraw(buffer)
 
         buffer.drawRect(0f, height.toFloat() - (height.toFloat() * fillPercent), width.toFloat(), height.toFloat(), paint)
-
-
         canvas.drawBitmap(bufferBitmap, 0f, 0f, transferPaint)
     }
 }

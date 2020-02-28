@@ -57,4 +57,6 @@ class DrinkTrackerPreferences {
             ?.putFloat(PREF_KEY_BAC, bac)
             ?.apply()
     }
+
+
 }
